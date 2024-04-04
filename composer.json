@@ -7,10 +7,12 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-xdebug": "*",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.1",
+        "gedmo/doctrine-extensions": "^3.14",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.26",
         "symfony/asset": "^7.0",
@@ -46,8 +48,7 @@
         "symfony/yaml": "^7.0",
         "symfonycasts/verify-email-bundle": "^1.16",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-        "ext-xdebug": "*"
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
