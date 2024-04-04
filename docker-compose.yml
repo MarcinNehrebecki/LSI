@@ -1,0 +1,77 @@
+name: lsi
+
+services:
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: lsi-nginx
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:80"
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+      - ./docker-compose/nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - php
+
+  db-postgres:
+    container_name: lsi-postgress
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=work
+    ports:
+      - 5432:5432
+    command: postgres -c 'max_connections=200'
+
+  php:
+    container_name: lsi-php
+    build:
+      context: docker-compose/php82
+      args:
+        - DOCKER_USER_ID=${DOCKER_USER_ID:-1000}
+        - DOCKER_GROUP_ID=${DOCKER_GROUP_ID:-1000}
+    extra_hosts:
+      host.docker.internal: host-gateway
+      api-project.local.projectdev.com: host-gateway
+    environment:
+      DOCKER_COMPOSE: "1"
+      IS_RUNNING_INSIDE_DOCKER_COMPOSE: "1"
+      COMPOSER_ALLOW_SUPERUSER: "1"
+      COMPOSER_HOME: "/tmp/composer"
+      PHP_IDE_CONFIG: "serverName=localhost"
+      XDEBUG_MODE: "debug,develop,profile"
+      XDEBUG_START_WITH_REQUEST: "yes"
+      XDEBUG_TRIGGER_VALUE: "${XDEBUG_TRIGGER_VALUE:-}"
+      XDEBUG_IDEKEY: "PHPSTORM"
+      XDEBUG_CLIENT_HOST: "${XDEBUG_CLIENT_HOST:-host.docker.internal}"
+      XDEBUG_CLIENT_PORT: "${XDEBUG_CLIENT_PORT:-9003}"
+      XDEBUG_DISCOVER_CLIENT_HOST: "${XDEBUG_DISCOVER_CLIENT_HOST:-false}"
+      XDEBUG_OUTPUT_DIR: "${XDEBUG_OUTPUT_DIR:-/app/var/xdebug_profiles}"
+    volumes:
+      - .:/app
+      - ./var/coverage:/opt/phpstorm-coverage
+      - ./docker-compose/php82/local.ini:/usr/local/etc/php/conf.d/local.ini
+    user: "${DOCKER_USER_ID:-1000}:${DOCKER_GROUP_ID:-1000}"
+
+###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/db/data:/var/lib/postgresql/data:rw
+###< doctrine/doctrine-bundle ###
+volumes:
+  rabbitmq_data:
+
+###> doctrine/doctrine-bundle ###
+  database_data:
+###< doctrine/doctrine-bundle ###
