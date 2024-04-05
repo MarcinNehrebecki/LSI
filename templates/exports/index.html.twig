@@ -4,37 +4,37 @@
 
 {% block body %}
     <h1>Exports index</h1>
+<div class='row'>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>LocalName</th>
-                <th>ExportAt</th>
-                <th>User</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>DeletedAt</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for export in exports %}
-            <tr>
-                <td>{{ export.id }}</td>
-                <td>{{ export.name }}</td>
-                <td>{{ export.localName }}</td>
-                <td>{{ export.author.name }}</td>
-                <td>{{ export.exportAt ? export.exportAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ export.createdAt ? export.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ export.updatedAt ? export.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ export.deletedAt ? export.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class='col-md-4'>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th data-field="i" data-width="50">Id</th>
+                    <th data-field="name" data-width="50">Name</th>
+                    <th data-field="local" data-width="50">LocalName</th>
+                    <th data-field="date" data-width="50">ExportAt</th>
+                    <th data-field="author" data-width="50">User</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for export in exports %}
+                <tr>
+                    <td>{{ export.id }}</td>
+                    <td>{{ export.name }}</td>
+                    <td>{{ export.localName }}</td>
+                    <td>{{ export.author.name }}</td>
+                    <td>{{ export.exportAt ? export.exportAt|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
