@@ -21,11 +21,17 @@ class Exports
     private ?string $localName = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $exportAt = null;
+    private ?\DateTime $exportAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'exports')]
     #[ORM\JoinColumn(nullable: false)]
     private ?user $author = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
 
     public function getId(): ?int
     {
@@ -56,12 +62,12 @@ class Exports
         return $this;
     }
 
-    public function getExportAt(): ?\DateTimeImmutable
+    public function getExportAt(): ?\DateTime
     {
         return $this->exportAt;
     }
 
-    public function setExportAt(\DateTimeImmutable $exportAt): static
+    public function setExportAt(\DateTime $exportAt): static
     {
         $this->exportAt = $exportAt;
 
