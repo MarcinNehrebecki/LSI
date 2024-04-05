@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exports index{% endblock %}
+
+{% block body %}
+    <h1>Exports index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>LocalName</th>
+                <th>ExportAt</th>
+                <th>User</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>DeletedAt</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for export in exports %}
+            <tr>
+                <td>{{ export.id }}</td>
+                <td>{{ export.name }}</td>
+                <td>{{ export.localName }}</td>
+                <td>{{ export.author.name }}</td>
+                <td>{{ export.exportAt ? export.exportAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ export.createdAt ? export.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ export.updatedAt ? export.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ export.deletedAt ? export.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
