@@ -22,10 +22,10 @@ class Exports
 
     #[ORM\ManyToOne(inversedBy: 'exports')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $author = null;
+    private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'exports')]
-    private locals $local;
+    private Locals $local;
 
     public function __construct()
     {
