@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Exports;
+use App\Entity\Locals;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -23,11 +24,13 @@ class ExportsFixtures extends Fixture
             ->setName('exportTest')
             ->setRoles(['ROLE_USER']);
 
+        $e['local_1'] = (new Locals())
+            ->setName('local 1');
         for ($i = 0;$i <= 22; $i++) {
             $e['export_'. $i] = (new Exports())
                 ->setAuthor($e['user'])
                 ->setName('exportTest - ' . $i)
-                ->setLocalName( 'exportTest local ' . $i)
+                ->setLocal( $e['local_1'])
                 ->setExportAt(new \DateTime());
         }
 
@@ -38,11 +41,14 @@ class ExportsFixtures extends Fixture
             ->setName('exportTest2')
             ->setRoles(['ROLE_USER']);
 
+        $e['local_2'] = (new Locals())
+            ->setName('local 2');
+
         for ($i = 0;$i <= 22; $i++) {
             $e['export_user2_'. $i] = (new Exports())
                 ->setAuthor($e['user_2'])
                 ->setName('exportTest 2 - ' . $i)
-                ->setLocalName( 'exportTest 2 local ' . $i)
+                ->setLocal( $e['local_2'])
                 ->setExportAt(new \DateTime());
         }
 

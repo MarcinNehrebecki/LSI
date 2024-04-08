@@ -17,15 +17,15 @@ class Exports
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $localName = null;
-
     #[ORM\Column]
     private ?\DateTime $exportAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'exports')]
     #[ORM\JoinColumn(nullable: false)]
     private ?user $author = null;
+
+    #[ORM\ManyToOne(inversedBy: 'exports')]
+    private locals $local;
 
     public function __construct()
     {
@@ -50,17 +50,6 @@ class Exports
         return $this;
     }
 
-    public function getLocalName(): ?string
-    {
-        return $this->localName;
-    }
-
-    public function setLocalName(string $localName): static
-    {
-        $this->localName = $localName;
-
-        return $this;
-    }
 
     public function getExportAt(): ?\DateTime
     {
@@ -82,6 +71,18 @@ class Exports
     public function setAuthor(?user $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getLocal(): locals
+    {
+        return $this->local;
+    }
+
+    public function setLocal(locals $local): static
+    {
+        $this->local = $local;
 
         return $this;
     }

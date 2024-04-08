@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Exports;
+use App\Form\ExportsType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @extends ServiceEntityRepository<Exports>
@@ -21,28 +24,17 @@ class ExportsRepository extends ServiceEntityRepository
         parent::__construct($registry, Exports::class);
     }
 
-    //    /**
-    //     * @return Exports[] Returns an array of Exports objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Exports
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function createQueryBuilderFromForm(FormInterface $form): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('e');
+        foreach ($form->all() as $field) {
+            match ($field->getName()) {
+                'local' => $field->getData() !== null ? $qb->andWhere('e.local = :local')->setParameter('local', $field->getData()) : null,
+                'export_at_from' =>  $field->getData() !== null ?$qb->andWhere('e.exportAt >= :export_at_from')->setParameter('export_at_from', $field->getData()) : null,
+                'export_at_to' =>  $field->getData() !== null ?$qb->andWhere('e.exportAt <= :export_at_to')->setParameter('export_at_to', $field->getData()) : null,
+                'Submit' => null,
+            };
+        }
+        return $qb;
+    }
 }
